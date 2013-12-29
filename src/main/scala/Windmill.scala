@@ -81,7 +81,7 @@ object Windmill extends App{
           round1(board: Board, player1, player2)
       }
     }
-    else ???
+    else print("and of round 1")
   }
 
   round1(board, player1, player2)
