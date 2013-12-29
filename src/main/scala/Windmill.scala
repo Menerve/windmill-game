@@ -37,8 +37,8 @@ object Windmill extends App{
 
   val positions: Map[Int, Boolean] = (for {i <- 1 to 24} yield (i, false)).toMap
 
-  val player1 = new Player(9)
-  val player2 = new Player(9)
+  val player1 = new Player(List())
+  val player2 = new Player(List())
 
   var turnOf: Player = player1
 
@@ -51,19 +51,19 @@ object Windmill extends App{
   def round1(board: Board, player1: Player, player2: Player){
     if (turnOf == player1) println("Turn of player 1.") else println("Turn of player 2.")
 
-    if (player1.pawns > 0 && player2.pawns > 0){
+    if (player1.pawns.size < 9 || player2.pawns.size < 9){
       print("Choose a position for you pawn: ")
 
       try{
         readInt() match {
           case pos if board.availablePositions contains pos  =>
             if (turnOf == player1){
-              turnOf = player2
-              round1(board.update(pos), player1.removePawn(player1.pawns), player2)
+              if (player2.pawns.size < 9) turnOf = player2 else print("No remaining pawns for player 2")
+              round1(board.update(pos), player1.addPawn(pos), player2)
             }
             else{
-              turnOf = player1
-              round1(board.update(pos), player1, player2.removePawn(player1.pawns))
+              if (player1.pawns.size < 9) turnOf = player1 else print("No remaining pawns for player 1")
+              round1(board.update(pos), player1, player2.addPawn(pos))
             }
           case _ =>
             println("Position not available")

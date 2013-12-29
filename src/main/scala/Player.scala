@@ -2,8 +2,8 @@
  * User: thomas
  * Date: 12/29/2013
  */
-class Player(nPawns: Int) {
-  val pawns = nPawns
+class Player(pawnsList: List[Int]) {
+  val pawns = pawnsList
 
-  def removePawn(pawnsRem: Int): Player = new Player(pawnsRem - 1)
+  def addPawn(pos: Int): Player = new Player(pawns.+:(pos))
 }
