@@ -9,11 +9,11 @@ object Windmill extends App{
     "The game goes in 2 rounds. The goal is to remove your opponent's pawns.\n" +
     "The game board is represented as follow:\n" +
     "------------------- \n" +
-    "|  -------------  | \n" +
+    "|  ------|------  | \n" +
     "|  |  -------  |  | \n" +
     "|-----|     |-----| \n" +
     "|  |  -------  |  | \n" +
-    "|  -------------  | \n" +
+    "|  ------|------  | \n" +
     "------------------- \n" +
     "Where all intersections represent a position where a pawn can be placed and indicated by the following values:\n" +
     "1--------2--------3 \n" +
