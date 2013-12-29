@@ -28,8 +28,18 @@ object Windmill extends App{
   //TODO: Print phase 1 explications
   //TODO: Initialize game
 
+  val windmills = List(
+    (1, 2, 3), (4, 5, 6), (7, 8, 9), (10, 11, 12),
+    (13, 14, 15), (16, 17, 18), (19, 20, 21), (22, 23, 24),
+    (1, 10, 22), (4, 11, 19), (7, 12, 16), (2, 5, 8),
+    (17, 20, 23), (9, 13, 18), (6, 14, 21), (3, 15, 24)
+  )
 
       }
     }
   }
 }
+  val positions: Map[Int, Boolean] = (for {i <- 1 to 24} yield (i, false)).toMap
+
+  val player1 = new Player()
+  val player2 = new Player()
