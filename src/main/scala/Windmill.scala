@@ -40,18 +40,22 @@ object Windmill extends App{
   val player1 = new Player()
   val player2 = new Player()
 
+  var turnOf: Player = player1
+
   println("Round 1 will now begin. \n" +
     "Players have to placed their 9 pawns on the board on empty positions.\n" +
     "If a player manages to make a windmill (3 pawns aligned in row or column), " +
     "the player can remove a pawn of its opponent. \n" +
-    "The round ends when no pawn remains in players' hands.")
+    "The round ends when no pawn remains in players' hands.\n")
 
   def round1(board: Board, player1: Player, player2: Player){
+    if (turnOf == player1) println("Turn of player 1.") else println("Turn of player 2.")
     print("Choose a position for you pawn: ")
 
     try{
       readInt() match {
         case pos if board.availablePositions contains pos  =>
+          if (turnOf == player1) turnOf = player2 else turnOf = player1
           round1(board.update(pos), player1, player2)
         case _ =>
           println("Position not available")
