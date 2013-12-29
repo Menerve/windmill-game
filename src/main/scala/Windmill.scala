@@ -26,7 +26,6 @@ object Windmill extends App{
     "Press enter to start the game.")
 
   //TODO: Print phase 1 explications
-  //TODO: Initialize game
 
   val windmills = List(
     (1, 2, 3), (4, 5, 6), (7, 8, 9), (10, 11, 12),
@@ -42,10 +41,11 @@ object Windmill extends App{
 
   def phase1(board: Board, player1: Player, player2: Player){
     print("Choose a position for you pawn: ")
+
     try{
       readInt() match {
         case pos if board.availablePositions contains pos  =>
-          board.update(pos)
+          phase1(board.update(pos), player1, player2)
         case _ =>
           println("Position not available")
           phase1(board: Board, player1: Player, player2: Player)
@@ -55,11 +55,7 @@ object Windmill extends App{
           println("You must choose a number between 1 and 24")
           phase1(board: Board, player1: Player, player2: Player)
     }
-
   }
 
   phase1(new Board(positions), player1, player2)
-
-//
-
 }
