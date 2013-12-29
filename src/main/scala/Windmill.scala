@@ -40,23 +40,23 @@ object Windmill extends App{
   val player1 = new Player()
   val player2 = new Player()
 
-  def phase1(board: Board, player1: Player, player2: Player){
+  def round1(board: Board, player1: Player, player2: Player){
     print("Choose a position for you pawn: ")
 
     try{
       readInt() match {
         case pos if board.availablePositions contains pos  =>
-          phase1(board.update(pos), player1, player2)
+          round1(board.update(pos), player1, player2)
         case _ =>
           println("Position not available")
-          phase1(board: Board, player1, player2)
+          round1(board: Board, player1, player2)
       }
     } catch {
         case ex: NumberFormatException =>
           println("You must choose a number between 1 and 24")
-          phase1(board: Board, player1, player2)
+          round1(board: Board, player1, player2)
     }
   }
 
-  phase1(new Board(positions), player1, player2)
+  round1(new Board(positions), player1, player2)
 }
