@@ -62,12 +62,12 @@ object Windmill extends App{
         readInt() match {
           case pos if board.availablePositions contains pos  =>
             if (turnOf == player1){
-              if (player2.pawns.size < 9) turnOf = player2 else print("No remaining pawns for player 2")
+              if (player2.pawns.size < 9) turnOf = player2 else print("No remaining pawns for player 2\n")
               gameState = gameState.update(board.update(pos), player1.addPawn(pos), player2)
               round1(board.update(pos), player1.addPawn(pos), player2)
             }
             else{
-              if (player1.pawns.size < 9) turnOf = player1 else print("No remaining pawns for player 1")
+              if (player1.pawns.size < 9) turnOf = player1 else print("No remaining pawns for player 1\n")
               gameState = gameState.update(board.update(pos), player1, player2.addPawn(pos))
               round1(board.update(pos), player1, player2.addPawn(pos))
             }
@@ -81,7 +81,7 @@ object Windmill extends App{
           round1(board: Board, player1, player2)
       }
     }
-    else print("and of round 1")
+    else print("end of round 1")
   }
 
   round1(board, player1, player2)
