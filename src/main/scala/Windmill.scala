@@ -42,6 +42,9 @@ object Windmill extends App{
 
   var turnOf: Player = player1
 
+  val board = new Board(positions)
+  var gameState = new GameState(board, player1, player2)
+
   println("Round 1 will now begin. \n" +
     "Players have to placed their 9 pawns on the board on empty positions.\n" +
     "If a player manages to make a windmill (3 pawns aligned in row or column), " +
@@ -49,6 +52,7 @@ object Windmill extends App{
     "The round ends when no pawn remains in players' hands.\n")
 
   def round1(board: Board, player1: Player, player2: Player){
+    println(gameState)
     if (turnOf == player1) println("Turn of player 1.") else println("Turn of player 2.")
 
     if (player1.pawns.size < 9 || player2.pawns.size < 9){
@@ -59,10 +63,12 @@ object Windmill extends App{
           case pos if board.availablePositions contains pos  =>
             if (turnOf == player1){
               if (player2.pawns.size < 9) turnOf = player2 else print("No remaining pawns for player 2")
+              gameState = gameState.update(board.update(pos), player1.addPawn(pos), player2)
               round1(board.update(pos), player1.addPawn(pos), player2)
             }
             else{
               if (player1.pawns.size < 9) turnOf = player1 else print("No remaining pawns for player 1")
+              gameState = gameState.update(board.update(pos), player1, player2.addPawn(pos))
               round1(board.update(pos), player1, player2.addPawn(pos))
             }
           case _ =>
@@ -78,5 +84,5 @@ object Windmill extends App{
     else ???
   }
 
-  round1(new Board(positions), player1, player2)
+  round1(board, player1, player2)
 }
