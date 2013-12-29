@@ -35,11 +35,31 @@ object Windmill extends App{
     (17, 20, 23), (9, 13, 18), (6, 14, 21), (3, 15, 24)
   )
 
-      }
-    }
-  }
-}
   val positions: Map[Int, Boolean] = (for {i <- 1 to 24} yield (i, false)).toMap
 
   val player1 = new Player()
   val player2 = new Player()
+
+  def phase1(board: Board, player1: Player, player2: Player){
+    print("Choose a position for you pawn: ")
+    try{
+      readInt() match {
+        case pos if board.availablePositions contains pos  =>
+          board.update(pos)
+        case _ =>
+          println("Position not available")
+          phase1(board: Board, player1: Player, player2: Player)
+      }
+    } catch {
+        case ex: NumberFormatException =>
+          println("You must choose a number between 1 and 24")
+          phase1(board: Board, player1: Player, player2: Player)
+    }
+
+  }
+
+  phase1(new Board(positions), player1, player2)
+
+//
+
+}
