@@ -6,16 +6,16 @@
 object Windmill extends App{
 
   readLine("Welcome to the Windmill game!\n\n" +
-    "The game goes in 2 phases. The goal is to remove your opponent's pawns.\n" +
-    "The game board is represented as below:\n" +
-    "o--------o--------o \n" +
-    "|  o-----o-----o  | \n" +
-    "|  |  o--o--o  |  | \n" +
-    "o--o--o     o--o--o \n" +
-    "|  |  o--o--o  |  | \n" +
-    "|  o-----o-----o  | \n" +
-    "o--------o--------o \n" +
-    "Where all o represent a position where a pawn can be placed and indicated by the following values:\n" +
+    "The game goes in 2 rounds. The goal is to remove your opponent's pawns.\n" +
+    "The game board is represented as follow:\n" +
+    "------------------- \n" +
+    "|  -------------  | \n" +
+    "|  |  -------  |  | \n" +
+    "|-----|     |-----| \n" +
+    "|  |  -------  |  | \n" +
+    "|  -------------  | \n" +
+    "------------------- \n" +
+    "Where all intersections represent a position where a pawn can be placed and indicated by the following values:\n" +
     "1--------2--------3 \n" +
     "|  4-----5-----6  | \n" +
     "|  |  7--8--9  |  | \n" +
@@ -23,6 +23,7 @@ object Windmill extends App{
     "|  |  16-17-18 |  | \n" +
     "|  19----20----21 | \n" +
     "22-------23-------24\n" +
+    "The player 1 is represented by the character o and the player 2 by x.\n" +
     "Press enter to start the game.")
 
   //TODO: Print phase 1 explications
@@ -48,12 +49,12 @@ object Windmill extends App{
           phase1(board.update(pos), player1, player2)
         case _ =>
           println("Position not available")
-          phase1(board: Board, player1: Player, player2: Player)
+          phase1(board: Board, player1, player2)
       }
     } catch {
         case ex: NumberFormatException =>
           println("You must choose a number between 1 and 24")
-          phase1(board: Board, player1: Player, player2: Player)
+          phase1(board: Board, player1, player2)
     }
   }
 
