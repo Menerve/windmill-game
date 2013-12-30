@@ -56,27 +56,30 @@ object Windmill extends App{
     round1(board, player1, player2)
   }
 
+  def askForPos(board: Board, player1: Player, player2: Player){
+    print("Choose a position for you pawn: ")
+    try{
+      readInt() match {
+        case pos if board.availablePositions contains pos =>
+          if (turnOfP1) updateGame(board.update(pos), player1.addPawn(pos), player2)
+          else updateGame(board.update(pos), player1, player2.addPawn(pos))
+        case _ =>
+          println("Position not available")
+          askForPos(board: Board, player1, player2)
+      }
+    } catch {
+      case ex: NumberFormatException =>
+        println("You must choose a number between 1 and 24")
+        askForPos(board: Board, player1, player2)
+    }
+  }
+
   def round1(board: Board, player1: Player, player2: Player){
     println(gameState)
 
     if (player1.pawnsRem > 0 || player2.pawnsRem > 0){
       if (turnOfP1) println("Turn of player 1.") else println("Turn of player 2.")
-      print("Choose a position for you pawn: ")
-
-      try{
-        readInt() match {
-          case pos if board.availablePositions contains pos =>
-            if (turnOfP1) updateGame(board.update(pos), player1.addPawn(pos), player2)
-            else updateGame(board.update(pos), player1, player2.addPawn(pos))
-          case _ =>
-            println("Position not available")
-            round1(board: Board, player1, player2)
-        }
-      } catch {
-        case ex: NumberFormatException =>
-          println("You must choose a number between 1 and 24")
-          round1(board: Board, player1, player2)
-      }
+      askForPos(board, player1, player2)
     }
     else print("end of round 1")
   }
