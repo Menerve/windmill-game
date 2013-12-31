@@ -9,11 +9,11 @@ class WindmillSuite extends FunSuite {
   val positions: Map[Int, Boolean] = (for {i <- 1 to 24} yield (i, false)).toMap
 
   val board = new Board(positions)
-  val player1 = new Player(List(), 9)
-  val player2 = new Player(List(), 9)
+  val player1 = new Player(List(), List(), 9)
+  val player2 = new Player(List(), List(), 9)
 
   var turnOfP1: Boolean = true
-  val gameState = new GameState(List(), board, player1, player2)
+  val gameState = new GameState(board, player1, player2)
 
   test("Correct initialisation"){
     assert(player1.pawns.isEmpty && player2.pawns.isEmpty, "Pawns of players not empty at start.")
@@ -35,9 +35,9 @@ class WindmillSuite extends FunSuite {
 
   test("Windmill"){
     val player = player1.addPawn(1).addPawn(2).addPawn(3)
-    assert(!gameState.isNewWindMill(player).isEmpty, "New windmill made.")
+    assert(!player.isNewWindmill.isEmpty, "New windmill made.")
 
-    val newGameState = gameState.updateWindMillsMade(gameState.isNewWindMill(player))
-    assert(newGameState.isNewWindMill(player).isEmpty, "Not a new windmill.")
+    val newPlayerState = player.updateWindmillsMade(player.isNewWindmill)
+    assert(newPlayerState.isNewWindmill.isEmpty, "Not a new windmill.")
   }
 }

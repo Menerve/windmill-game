@@ -31,11 +31,11 @@ object Windmill extends App{
   val positions: Map[Int, Boolean] = (for {i <- 1 to 24} yield (i, false)).toMap
 
   val board = new Board(positions)
-  val player1 = new Player(List(), 9)
-  val player2 = new Player(List(), 9)
+  val player1 = new Player(List(), List(), 9)
+  val player2 = new Player(List(), List(), 9)
 
   var turnOfP1: Boolean = true
-  var gameState = new GameState(List(), board, player1, player2)
+  var gameState = new GameState(board, player1, player2)
 
   println("Round 1 will now begin. \n" +
     "Players have to placed their 9 pawns on the board on empty positions.\n" +
@@ -46,29 +46,23 @@ object Windmill extends App{
   def updateGame(board: Board, player1: Player, player2: Player){
 
     gameState = gameState.update(board, player1, player2)
+    val newWindMill = if (turnOfP1) player1.isNewWindmill else player2.isNewWindmill
 
-    if (checkWindMills(player1, player2)){
+    if (!newWindMill.isEmpty){
       println("You formed a windmill, you can remove a pawn of you opponent! Choose a position: ")
       if (turnOfP1){
         val pos = askForPos(board, player1, player2, player2.pawns)
-        updateGame(board.update(pos), player1, player2.removePawn(pos))
+        updateGame(board.update(pos), player1.updateWindmillsMade(newWindMill), player2.removePawn(pos))
       }
       else {
         val pos = askForPos(board, player1, player2, player1.pawns)
-        updateGame(board.update(pos), player1.removePawn(pos), player2)
+        updateGame(board.update(pos), player1.removePawn(pos), player2.updateWindmillsMade(newWindMill))
       }
     }
     else{
       turnOfP1 = !turnOfP1
       round1(board, player1, player2)
     }
-  }
-
-  def checkWindMills(player1: Player, player2: Player): Boolean = {
-    val newWindMill = if (turnOfP1) gameState.isNewWindMill(player1) else gameState.isNewWindMill(player2)
-    if (!newWindMill.isEmpty)
-      gameState = gameState.updateWindMillsMade(newWindMill)
-    !newWindMill.isEmpty
   }
 
   def askForPos(board: Board, player1: Player, player2: Player, posAvailable: List[Int]): Int = {
