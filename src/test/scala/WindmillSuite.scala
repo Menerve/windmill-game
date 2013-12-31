@@ -15,29 +15,31 @@ class WindmillSuite extends FunSuite {
   var turnOfP1: Boolean = true
   val gameState = new GameState(board, player1, player2)
 
-  test("Correct initialisation"){
+  test("Correct initialisation."){
     assert(player1.pawns.isEmpty && player2.pawns.isEmpty, "Pawns of players not empty at start.")
     assert(player1.pawnsRem == 9 && player2.pawnsRem == 9, "Not enough pawns at start.")
     assert(board.availablePositions.size == 24, "All positions must be available.")
     assert(positions.size == 24, "Wrong numbers of positions.")
   }
 
-  test("Player add pawn"){
+  test("Player adds pawn."){
     assert(player1.addPawn(3).pawnsRem == player1.pawnsRem - 1, "Pawn has to be removed from remaining when added.")
     assert(player1.addPawn(3).pawns == List(3), "Add new pawn to list of pawns.")
   }
 
-  test("Player remove pawn"){
+  test("Player removes pawn."){
     val player = player1.addPawn(3)
     assert(player.removePawn(3).pawnsRem == player.pawnsRem, "Remove a pawn doesn't add a remaining pawn.")
     assert(player.removePawn(3).pawns == List(), "Remove pawn from list.")
   }
 
-  test("Windmill"){
+  test("New windmill."){
     val player = player1.addPawn(1).addPawn(2).addPawn(3)
-    assert(!player.isNewWindmill.isEmpty, "New windmill made.")
+    assert(!player.isNewWindmill.isEmpty)
+  }
 
-    val newPlayerState = player.updateWindmillsMade(player.isNewWindmill)
-    assert(newPlayerState.isNewWindmill.isEmpty, "Not a new windmill.")
+  test("Pawns in windmill can't be removed."){
+    val player = player1.addPawn(1).addPawn(2).addPawn(3).updateWindmillsMade(List((1, 2, 3)))
+    assert(player.removablePawns.isEmpty)
   }
 }
