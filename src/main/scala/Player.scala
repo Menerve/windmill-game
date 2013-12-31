@@ -26,4 +26,6 @@ class Player(windmillsList: List[(Int, Int, Int)], pawnsList: List[Int], limit: 
 
   def addPawn(pos: Int): Player = new Player(windmillsMade, pawns.+:(pos), pawnsRem - 1)
   def removePawn(pos: Int): Player = new Player(windmillsMade, pawns diff List(pos), pawnsRem)
+  def removablePawns: List[Int] =
+    pawns diff windmillsMade.unzip3._1 diff windmillsMade.unzip3._2 diff windmillsMade.unzip3._3
 }

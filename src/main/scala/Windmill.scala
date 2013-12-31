@@ -48,14 +48,14 @@ object Windmill extends App{
     gameState = gameState.update(board, player1, player2)
     val newWindMill = if (turnOfP1) player1.isNewWindmill else player2.isNewWindmill
 
-    if (!newWindMill.isEmpty){
+    if (!newWindMill.isEmpty && !player1.removablePawns.isEmpty && !player2.removablePawns.isEmpty){
       println("You formed a windmill, you can remove a pawn of you opponent! Choose a position: ")
       if (turnOfP1){
-        val pos = askForPos(board, player1, player2, player2.pawns)
+        val pos = askForPos(board, player1, player2, player2.removablePawns)
         updateGame(board.update(pos), player1.updateWindmillsMade(newWindMill), player2.removePawn(pos))
       }
       else {
-        val pos = askForPos(board, player1, player2, player1.pawns)
+        val pos = askForPos(board, player1, player2, player1.removablePawns)
         updateGame(board.update(pos), player1.removePawn(pos), player2.updateWindmillsMade(newWindMill))
       }
     }
