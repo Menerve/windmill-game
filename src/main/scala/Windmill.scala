@@ -40,16 +40,19 @@ object Windmill extends App{
   println("Round 1 will now begin. \n" +
     "Players have to placed their 9 pawns on the board on empty positions.\n" +
     "If a player manages to make a windmill (3 pawns aligned in row or column), " +
-    "the player can remove a pawn of its opponent. \n" +
+    "the player can remove a pawn of its opponent not in a windmill. \n" +
     "The round ends when no pawn remains in players' hands.\n")
 
   def updateGame(board: Board, player1: Player, player2: Player){
 
     gameState = gameState.update(board, player1, player2)
+    // Check if a windmill has been made by the player
     val newWindMill = if (turnOfP1) player1.isNewWindmill else player2.isNewWindmill
 
     if (!newWindMill.isEmpty && !player1.removablePawns.isEmpty && !player2.removablePawns.isEmpty){
       println("You formed a windmill, you can remove a pawn of you opponent! Choose a position: ")
+      // Ask for position among available opponent's pawns
+      // and update the board, windmills of the player and remove pawn at position
       if (turnOfP1){
         val pos = askForPos(board, player1, player2, player2.removablePawns)
         updateGame(board.update(pos), player1.updateWindmillsMade(newWindMill), player2.removePawn(pos))
@@ -60,6 +63,7 @@ object Windmill extends App{
       }
     }
     else{
+      // Change turn
       turnOfP1 = !turnOfP1
       round1(board, player1, player2)
     }
@@ -89,6 +93,7 @@ object Windmill extends App{
       print("Choose a position for you pawn: ")
       val pos = askForPos(board, player1, player2, board.availablePositions)
 
+      // Add pawn for the right player
       if (turnOfP1) updateGame(board.update(pos), player1.addPawn(pos), player2)
       else updateGame(board.update(pos), player1, player2.addPawn(pos))
     }
