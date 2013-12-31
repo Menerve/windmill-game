@@ -5,5 +5,5 @@
 import org.scalatest.FunSuite
 
 class WindmillSuite extends FunSuite {
-
+  //TODO: Add basics tests
 }

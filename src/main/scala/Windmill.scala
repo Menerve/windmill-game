@@ -26,7 +26,7 @@ object Windmill extends App{
     "The player 1 is represented by the character o and the player 2 by x.\n" +
     "Press enter to start the game.")
 
-  //TODO: Print phase 1 explications
+  //TODO: Refactor code for testing purpose
 
   val positions: Map[Int, Boolean] = (for {i <- 1 to 24} yield (i, false)).toMap
 

@@ -6,6 +6,8 @@
 
 class Board(positions: Map[Int, Boolean]) {
 
+  //TODO: Merge with GameState?
+
   def update(position: Int): Board = {
     new Board(positions.updated(position, !positions.get(position).get))
   }
