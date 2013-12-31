@@ -28,13 +28,6 @@ object Windmill extends App{
 
   //TODO: Print phase 1 explications
 
-  val windmills = List(
-    (1, 2, 3), (4, 5, 6), (7, 8, 9), (10, 11, 12),
-    (13, 14, 15), (16, 17, 18), (19, 20, 21), (22, 23, 24),
-    (1, 10, 22), (4, 11, 19), (7, 12, 16), (2, 5, 8),
-    (17, 20, 23), (9, 13, 18), (6, 14, 21), (3, 15, 24)
-  )
-
   val positions: Map[Int, Boolean] = (for {i <- 1 to 24} yield (i, false)).toMap
 
   val board = new Board(positions)
@@ -42,7 +35,7 @@ object Windmill extends App{
   val player2 = new Player(List(), 9)
 
   var turnOfP1: Boolean = true
-  var gameState = new GameState(board, player1, player2)
+  var gameState = new GameState(List(), board, player1, player2)
 
   println("Round 1 will now begin. \n" +
     "Players have to placed their 9 pawns on the board on empty positions.\n" +
@@ -51,26 +44,50 @@ object Windmill extends App{
     "The round ends when no pawn remains in players' hands.\n")
 
   def updateGame(board: Board, player1: Player, player2: Player){
-    turnOfP1 = !turnOfP1
+
     gameState = gameState.update(board, player1, player2)
-    round1(board, player1, player2)
+
+    if (checkWindMills(player1, player2)){
+      println("You formed a windmill, you can remove a pawn of you opponent! Choose a position: ")
+      if (turnOfP1) askForPos(board, player1, player2, player2.pawns, add = false)
+      else askForPos(board, player1, player2, player1.pawns, add = false)
+    }
+    else{
+      turnOfP1 = !turnOfP1
+      round1(board, player1, player2)
+    }
   }
 
-  def askForPos(board: Board, player1: Player, player2: Player){
-    print("Choose a position for you pawn: ")
+  def checkWindMills(player1: Player, player2: Player): Boolean = {
+    val newWindMill = if (turnOfP1) gameState.isNewWindMill(player1) else gameState.isNewWindMill(player2)
+    if (!newWindMill.isEmpty)
+      gameState = gameState.updateWindMillsMade(newWindMill)
+    !newWindMill.isEmpty
+  }
+
+  def askForPos(board: Board, player1: Player, player2: Player, posAvailable: List[Int], add: Boolean){
+
     try{
       readInt() match {
-        case pos if board.availablePositions contains pos =>
-          if (turnOfP1) updateGame(board.update(pos), player1.addPawn(pos), player2)
-          else updateGame(board.update(pos), player1, player2.addPawn(pos))
+        case pos if posAvailable contains pos =>
+          if (turnOfP1)
+            if (add)
+              updateGame(board.update(pos), player1.addPawn(pos), player2)
+            else
+              updateGame(board.update(pos), player1, player2.removePawn(pos))
+          else
+            if (add)
+              updateGame(board.update(pos), player1, player2.addPawn(pos))
+            else
+              updateGame(board.update(pos), player1.removePawn(pos), player2)
         case _ =>
           println("Position not available")
-          askForPos(board: Board, player1, player2)
+          askForPos(board: Board, player1, player2, posAvailable, add)
       }
     } catch {
       case ex: NumberFormatException =>
         println("You must choose a number between 1 and 24")
-        askForPos(board: Board, player1, player2)
+        askForPos(board: Board, player1, player2, posAvailable, add)
     }
   }
 
@@ -79,7 +96,8 @@ object Windmill extends App{
 
     if (player1.pawnsRem > 0 || player2.pawnsRem > 0){
       if (turnOfP1) println("Turn of player 1.") else println("Turn of player 2.")
-      askForPos(board, player1, player2)
+      print("Choose a position for you pawn: ")
+      askForPos(board, player1, player2, board.availablePositions, add = true)
     }
     else print("end of round 1")
   }
