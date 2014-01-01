@@ -27,6 +27,8 @@ object Windmill extends App{
     "Press enter to start the game.")
 
   //TODO: Refactor code for testing purpose
+  //TODO: Implement round 2
+  //TODO: Implement victory and defeat conditions
 
   val positions: Map[Int, Boolean] = (for {i <- 1 to 24} yield (i, false)).toMap
 
