@@ -26,9 +26,8 @@ object Windmill extends App{
     "The player 1 is represented by the character o and the player 2 by x.\n" +
     "Press enter to start the game.")
 
-  //TODO: Refactor code for testing purpose
-  //TODO: Implement round 2
-  //TODO: Implement victory and defeat conditions
+  //TODO: Player can cancel choice
+  //TODO: Add replay
 
   val player1 = Player(List(), List(), 9)
   val player2 = Player(List(), List(), 9)
