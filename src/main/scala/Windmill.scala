@@ -68,15 +68,6 @@ object Windmill extends App{
       "Players can move their pawns (not in diagonal) to create windmills " +
       "and remove pawns of the opponent.")
 
-    def isRoundOver(gameState: GameState, player1: Player, player2: Player, nTurn: Int,
-                    turnWithoutWindmills: Int, countDown: Int, positionsRepeadted: Int): Boolean = {
-      (player1.pawns.size < 3 || player2.pawns.size < 3) ||
-        (player1.movablePawns(gameState.availablePositions).isEmpty || player2.movablePawns(gameState.availablePositions).isEmpty) ||
-        (turnsWithoutWindmills == 50) ||
-        (nTurn - countDown == 10) ||
-        (positionsRepeated == 3)
-    }
-
     var turnsWithoutWindmills = 0
     var windmillsMade1 = 0
     var windmillsMade2 = 0
@@ -87,28 +78,7 @@ object Windmill extends App{
 
     def run(gameState: GameState, player1: Player, player2: Player){
 
-      if (nTurn == 0){
-        windmillsMade1 = player1.windmillsMade.size
-        windmillsMade2 = player2.windmillsMade.size
-        gameStateSaved = gameState
-      }
-
-      if (player1.windmillsMade.size == windmillsMade1 + 1)
-        turnsWithoutWindmills = 0
-      else
-        turnsWithoutWindmills += 1
-
-      if (player1.pawns.size == 3 && player2.pawns.size == 3 && countDown == 0)
-        countDown = nTurn
-
-      if (gameState.availablePositions.size == gameStateSaved.availablePositions.size) {
-        if (gameState.positions == gameStateSaved.positions)
-          positionsRepeated += 1
-      } else {
-        gameStateSaved = gameState
-        positionsRepeated = 0
-      }
-
+      updateGameOverChecks()
       println(gameState)
 
       if(!isRoundOver(gameState, player1, player2, nTurn, turnsWithoutWindmills, countDown, positionsRepeated)){
@@ -129,7 +99,52 @@ object Windmill extends App{
         }
       }
       else {
+        println("Game over!")
+        val winner = checkVictory(gameState, player1, player2)
+        if(winner != 0)
+          println("The winner is player " + winner + "!")
+        else println("It's a tie!")
+      }
+    }
 
+    def isRoundOver(gameState: GameState, player1: Player, player2: Player, nTurn: Int,
+                    turnWithoutWindmills: Int, countDown: Int, positionsRepeated: Int): Boolean = {
+      (player1.pawns.size < 3 || player2.pawns.size < 3) ||
+        (player1.movablePawns(gameState.availablePositions).isEmpty || player2.movablePawns(gameState.availablePositions).isEmpty) ||
+        (turnsWithoutWindmills == 50) ||
+        (countDown != 0 && nTurn - countDown == 10) ||
+        (positionsRepeated == 3)
+    }
+
+    def checkVictory(gS: GameState, player1: Player, player2: Player): Int = {
+      if (player1.pawns.size < 3) 2
+      else if (player2.pawns.size < 3) 1
+      else if (player1.movablePawns(gS.availablePositions).isEmpty) 2
+      else if (player2.movablePawns(gS.availablePositions).isEmpty) 1
+      else 0
+    }
+
+    def updateGameOverChecks(){
+      if (nTurn == 0){
+        windmillsMade1 = player1.windmillsMade.size
+        windmillsMade2 = player2.windmillsMade.size
+        gameStateSaved = gameState
+      }
+
+      if (player1.windmillsMade.size == windmillsMade1 + 1)
+        turnsWithoutWindmills = 0
+      else
+        turnsWithoutWindmills += 1
+
+      if (player1.pawns.size == 3 && player2.pawns.size == 3 && countDown == 0)
+        countDown = nTurn
+
+      if (gameState.availablePositions.size == gameStateSaved.availablePositions.size) {
+        if (gameState.positions == gameStateSaved.positions)
+          positionsRepeated += 1
+      } else {
+        gameStateSaved = gameState
+        positionsRepeated = 0
       }
     }
   }
