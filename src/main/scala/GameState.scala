@@ -2,7 +2,7 @@
  * User: thomas
  * Date: 12/29/2013
  */
-class GameState(positions: Map[Int, Boolean], player1: Player, player2: Player, turnOf: Boolean) {
+case class GameState(positions: Map[Int, Boolean], player1: Player, player2: Player, turnOf: Boolean) {
 
   val turnOfP1 = turnOf
 
@@ -15,10 +15,10 @@ class GameState(positions: Map[Int, Boolean], player1: Player, player2: Player, 
   }
 
   def updatePositions(position: Int): GameState =
-    new GameState(positions.updated(position, !positions.get(position).get), player1, player2, turnOf)
+    GameState(positions.updated(position, !positions.get(position).get), player1, player2, turnOf)
 
   def update(newPlayer1: Player, newPlayer2: Player, turnOf: Boolean = turnOfP1): GameState =
-    new GameState(positions, newPlayer1, newPlayer2, turnOf)
+    GameState(positions, newPlayer1, newPlayer2, turnOf)
 
   override def toString = {
 

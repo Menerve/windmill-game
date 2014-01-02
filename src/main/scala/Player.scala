@@ -2,7 +2,7 @@
  * User: thomas
  * Date: 12/29/2013
  */
-class Player(windmillsList: List[(Int, Int, Int)], pawnsList: List[Int], limit: Int) {
+case class Player(windmillsList: List[(Int, Int, Int)], pawnsList: List[Int], limit: Int) {
   val pawns = pawnsList
   val pawnsRem = limit
   val windmillsMade: List[(Int, Int, Int)] = windmillsList
@@ -37,16 +37,16 @@ class Player(windmillsList: List[(Int, Int, Int)], pawnsList: List[Int], limit: 
     }
   }
 
-  def updateWindmillsMade(newWindmill: List[(Int, Int, Int)]) = new Player(windmillsMade ++ newWindmill, pawns, pawnsRem)
+  def updateWindmillsMade(newWindmill: List[(Int, Int, Int)]) = Player(windmillsMade ++ newWindmill, pawns, pawnsRem)
 
-  def addPawn(pos: Int): Player = new Player(windmillsMade, pawns.+:(pos), pawnsRem - 1)
-  def removePawn(pos: Int): Player = new Player(windmillsMade, pawns diff List(pos), pawnsRem)
+  def addPawn(pos: Int): Player = Player(windmillsMade, pawns.+:(pos), pawnsRem - 1)
+  def removePawn(pos: Int): Player = Player(windmillsMade, pawns diff List(pos), pawnsRem)
   // Remove windmills from pawns
   def removablePawns: List[Int] =
     pawns diff windmillsMade.unzip3._1 diff windmillsMade.unzip3._2 diff windmillsMade.unzip3._3
 
   def move(pawn: Int, pos: Int): Player = {
     val newWindmillsMade = windmillsMade.filter{ case (a, b, c) => !(a == pawn || b == pawn || c == pawn) }
-    new Player(newWindmillsMade, pawns.filter(_ != pawn).+:(pos), pawnsRem)
+    Player(newWindmillsMade, pawns.filter(_ != pawn).+:(pos), pawnsRem)
   }
 }

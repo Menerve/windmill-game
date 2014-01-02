@@ -6,10 +6,10 @@ import org.scalatest.FunSuite
 
 class WindmillSuite extends FunSuite {
 
-  val player1 = new Player(List(), List(), 9)
-  val player2 = new Player(List(), List(), 9)
+  val player1 = Player(List(), List(), 9)
+  val player2 = Player(List(), List(), 9)
   val positions: Map[Int, Boolean] = (for {i <- 1 to 24} yield (i, false)).toMap
-  val gameState = new GameState(positions, player1, player2, turnOf = true)
+  val gameState = GameState(positions, player1, player2, turnOf = true)
 
   test("Correct initialisation."){
     assert(player1.pawns.isEmpty && player2.pawns.isEmpty, "Pawns of players not empty at start.")

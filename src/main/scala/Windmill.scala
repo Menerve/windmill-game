@@ -30,10 +30,10 @@ object Windmill extends App{
   //TODO: Implement round 2
   //TODO: Implement victory and defeat conditions
 
-  val player1 = new Player(List(), List(), 9)
-  val player2 = new Player(List(), List(), 9)
+  val player1 = Player(List(), List(), 9)
+  val player2 = Player(List(), List(), 9)
   val positions: Map[Int, Boolean] = (for {i <- 1 to 24} yield (i, false)).toMap
-  val gameState = new GameState(positions, player1, player2, turnOf = true)
+  val gameState = GameState(positions, player1, player2, turnOf = true)
 
   println("Round 1 will now begin. \n" +
     "Players have to placed their 9 pawns on the board on empty positions.\n" +
