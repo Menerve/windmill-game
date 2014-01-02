@@ -35,26 +35,27 @@ object Windmill extends App{
   val positions: Map[Int, Boolean] = (for {i <- 1 to 24} yield (i, false)).toMap
   val gameState = GameState(positions, player1, player2, turnOf = true)
 
-  println("Round 1 will now begin. \n" +
-    "Players have to placed their 9 pawns on the board on empty positions.\n" +
-    "If a player manages to make a windmill (3 pawns aligned in row or column), " +
-    "the player can remove a pawn of its opponent not in a windmill. \n" +
-    "The round ends when no pawn remains in players' hands.\n")
+
 
   object Round1 extends Round{
+
+    println("Round 1 will now begin. \n" +
+      "Players have to placed their 9 pawns on the board on empty positions.\n" +
+      "If a player manages to make a windmill (3 pawns aligned in row or column), " +
+      "the player can remove a pawn of its opponent not in a windmill. \n" +
+      "The round ends when no pawn remains in players' hands.")
+
     def run(gameState: GameState, player1: Player, player2: Player): Unit = {
-      println(gameState)
+       println(gameState)
 
       if (player1.pawnsRem > 0 || player2.pawnsRem > 0){
         if (gameState.turnOfP1){
-          println("Turn of player 1.")
-          print("Choose a position for you pawn: ")
+          print("Turn of player 1.\nChoose a position for you pawn: ")
           val pos = player1.askForPos(gameState, player1, player2, gameState.availablePositions)
           updateGame(gameState.updatePositions(pos), player1.addPawn(pos), player2)
         }
         else {
-          println("Turn of player 2.")
-          print("Choose a position for you pawn: ")
+          print("Turn of player 2.\nChoose a position for you pawn: ")
           val pos = player2.askForPos(gameState, player1, player2, gameState.availablePositions)
           updateGame(gameState.updatePositions(pos), player1, player2.addPawn(pos))
         }
@@ -64,18 +65,23 @@ object Windmill extends App{
   }
 
   object Round2 extends Round {
+
+    println("Round 2 will now begin. \n" +
+      "Players can move their pawns (not in diagonal) to create windmills " +
+      "and remove pawns of the opponent.")
+
     def run(gameState: GameState, player1: Player, player2: Player){
+      println(gameState)
+
       if (gameState.turnOfP1){
-        println("Turn of player 1.")
-        print("Choose a pawn to move: ")
+        print("Turn of player 1.\nChoose a pawn to move: ")
         val pawn = player1.askForPos(gameState, player1, player2, player1.pawns)
         print("Choose a position for this pawn: ")
         val pos = player2.askForPos(gameState, player1, player2, gameState.availablePositions)
         updateGame(gameState.updatePositions(pos), player1.move(pawn, pos), player2)
       }
       else {
-        println("Turn of player 2.")
-        print("Choose a pawn to move: ")
+        print("Turn of player 2.\nChoose a pawn to move: ")
         val pawn = player1.askForPos(gameState, player1, player2, player2.pawns)
         print("Choose a position for this pawn: ")
         val pos = player2.askForPos(gameState, player1, player2, gameState.availablePositions)
