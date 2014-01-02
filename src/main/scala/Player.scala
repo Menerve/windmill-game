@@ -22,7 +22,6 @@ case class Player(windmillsList: List[(Int, Int, Int)], pawnsList: List[Int], li
   }
 
   def askForPos(gameState: GameState, player1: Player, player2: Player, posAvailable: List[Int]): Int = {
-
     try{
       readInt() match {
         case pos if posAvailable contains pos => pos
@@ -49,4 +48,28 @@ case class Player(windmillsList: List[(Int, Int, Int)], pawnsList: List[Int], li
     val newWindmillsMade = windmillsMade.filter{ case (a, b, c) => !(a == pawn || b == pawn || c == pawn) }
     Player(newWindmillsMade, pawns.filter(_ != pawn).+:(pos), pawnsRem)
   }
+
+  def movablePawns(availablePositions: List[Int]): List[Int] = {
+    for {
+      pos <- availablePositions
+      pawn <- pawns
+      if nextTo(pos, pawn)
+    } yield pawn
+  }
+
+  def nextTo(pos: Int, pawn: Int): Boolean = {
+    for (windmill <- windmills)
+      if (windmill._1 == pawn && windmill._2 == pos ||
+        windmill._1 == pos && windmill._2 == pawn ||
+        windmill._2 == pawn && windmill._3 == pos ||
+        windmill._2 == pos && windmill._3 == pawn)
+        return true
+    false
+  }
+
+  def availablePositions(pawn: Int, positions: List[Int]): List[Int] =
+    for {
+      pos <- positions
+      if nextTo(pos, pawn)
+    } yield pos
 }

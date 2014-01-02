@@ -35,8 +35,6 @@ object Windmill extends App{
   val positions: Map[Int, Boolean] = (for {i <- 1 to 24} yield (i, false)).toMap
   val gameState = GameState(positions, player1, player2, turnOf = true)
 
-
-
   object Round1 extends Round{
 
     println("Round 1 will now begin. \n" +
@@ -75,17 +73,17 @@ object Windmill extends App{
 
       if (gameState.turnOfP1){
         print("Turn of player 1.\nChoose a pawn to move: ")
-        val pawn = player1.askForPos(gameState, player1, player2, player1.pawns)
+        val pawn = player1.askForPos(gameState, player1, player2, player1.movablePawns(gameState.availablePositions))
         print("Choose a position for this pawn: ")
-        val pos = player2.askForPos(gameState, player1, player2, gameState.availablePositions)
-        updateGame(gameState.updatePositions(pos), player1.move(pawn, pos), player2)
+        val pos = player2.askForPos(gameState, player1, player2, player1.availablePositions(pawn, gameState.availablePositions))
+        updateGame(gameState.updatePositions(pos).updatePositions(pawn), player1.move(pawn, pos), player2)
       }
       else {
         print("Turn of player 2.\nChoose a pawn to move: ")
-        val pawn = player1.askForPos(gameState, player1, player2, player2.pawns)
+        val pawn = player1.askForPos(gameState, player1, player2, player2.movablePawns(gameState.availablePositions))
         print("Choose a position for this pawn: ")
-        val pos = player2.askForPos(gameState, player1, player2, gameState.availablePositions)
-        updateGame(gameState.updatePositions(pos), player1, player2.move(pawn, pos))
+        val pos = player2.askForPos(gameState, player1, player2, player2.availablePositions(pawn, gameState.availablePositions))
+        updateGame(gameState.updatePositions(pos).updatePositions(pawn), player1, player2.move(pawn, pos))
       }
     }
   }
