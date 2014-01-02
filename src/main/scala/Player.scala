@@ -50,11 +50,13 @@ case class Player(windmillsList: List[(Int, Int, Int)], pawnsList: List[Int], li
   }
 
   def movablePawns(availablePositions: List[Int]): List[Int] = {
-    for {
-      pos <- availablePositions
-      pawn <- pawns
-      if nextTo(pos, pawn)
-    } yield pawn
+    if (pawns.size > 3)
+      for {
+        pos <- availablePositions
+        pawn <- pawns
+        if nextTo(pos, pawn)
+      } yield pawn
+    else pawns
   }
 
   def nextTo(pos: Int, pawn: Int): Boolean = {
@@ -68,8 +70,10 @@ case class Player(windmillsList: List[(Int, Int, Int)], pawnsList: List[Int], li
   }
 
   def availablePositions(pawn: Int, positions: List[Int]): List[Int] =
-    for {
-      pos <- positions
-      if nextTo(pos, pawn)
-    } yield pos
+    if (pawns.size > 3)
+      for {
+        pos <- positions
+        if nextTo(pos, pawn)
+      } yield pos
+    else positions
 }
