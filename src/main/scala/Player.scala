@@ -21,6 +21,22 @@ class Player(windmillsList: List[(Int, Int, Int)], pawnsList: List[Int], limit: 
     }
   }
 
+  def askForPos(gameState: GameState, player1: Player, player2: Player, posAvailable: List[Int]): Int = {
+
+    try{
+      readInt() match {
+        case pos if posAvailable contains pos => pos
+        case _ =>
+          println("Position not available")
+          askForPos(gameState, player1, player2, posAvailable)
+      }
+    } catch {
+      case ex: NumberFormatException =>
+        println("You must choose a number between 1 and 24")
+        askForPos(gameState, player1, player2, posAvailable)
+    }
+  }
+
   def updateWindmillsMade(newWindmill: List[(Int, Int, Int)]) = new Player(windmillsMade ++ newWindmill, pawns, pawnsRem)
 
   def addPawn(pos: Int): Player = new Player(windmillsMade, pawns.+:(pos), pawnsRem - 1)
