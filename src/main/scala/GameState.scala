@@ -2,7 +2,11 @@
  * User: thomas
  * Date: 12/29/2013
  */
-class GameState(board: Board, player1: Player, player2: Player) {
+class GameState(positions: Map[Int, Boolean], player1: Player, player2: Player, turnOf: Boolean) {
+
+  val turnOfP1 = turnOf
+
+  def availablePositions: List[Int] = positions.filter(!_._2).map{ case (pos, taken) => pos }.toList
 
   def combinePawns(): Map[Int, String] = {
     val pawns1 = player1.pawns.map((_, "o")).toMap
@@ -10,8 +14,11 @@ class GameState(board: Board, player1: Player, player2: Player) {
     pawns1 ++ pawns2
   }
 
-  def update(newBoard: Board, newPlayer1: Player, newPlayer2: Player): GameState =
-    new GameState(newBoard, newPlayer1, newPlayer2)
+  def updatePositions(position: Int): GameState =
+    new GameState(positions.updated(position, !positions.get(position).get), player1, player2, turnOf)
+
+  def update(newPlayer1: Player, newPlayer2: Player, turnOf: Boolean = turnOfP1): GameState =
+    new GameState(positions, newPlayer1, newPlayer2, turnOf)
 
   override def toString = {
 

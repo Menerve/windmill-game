@@ -28,4 +28,9 @@ class Player(windmillsList: List[(Int, Int, Int)], pawnsList: List[Int], limit: 
   // Remove windmills from pawns
   def removablePawns: List[Int] =
     pawns diff windmillsMade.unzip3._1 diff windmillsMade.unzip3._2 diff windmillsMade.unzip3._3
+
+  def move(pawn: Int, pos: Int): Player = {
+    val newWindmillsMade = windmillsMade.filter{ case (a, b, c) => !(a == pawn || b == pawn || c == pawn) }
+    new Player(newWindmillsMade, pawns.filter(_ != pawn).+:(pos), pawnsRem)
+  }
 }
