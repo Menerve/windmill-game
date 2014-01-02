@@ -68,22 +68,68 @@ object Windmill extends App{
       "Players can move their pawns (not in diagonal) to create windmills " +
       "and remove pawns of the opponent.")
 
+    def isRoundOver(gameState: GameState, player1: Player, player2: Player, nTurn: Int,
+                    turnWithoutWindmills: Int, countDown: Int, positionsRepeadted: Int): Boolean = {
+      (player1.pawns.size < 3 || player2.pawns.size < 3) ||
+        (player1.movablePawns(gameState.availablePositions).isEmpty || player2.movablePawns(gameState.availablePositions).isEmpty) ||
+        (turnsWithoutWindmills == 50) ||
+        (nTurn - countDown == 10) ||
+        (positionsRepeated == 3)
+    }
+
+    var turnsWithoutWindmills = 0
+    var windmillsMade1 = 0
+    var windmillsMade2 = 0
+    var nTurn = 0
+    var countDown = 0
+    var gameStateSaved = GameState(positions, player1, player2, turnOf = true)
+    var positionsRepeated = 0
+
     def run(gameState: GameState, player1: Player, player2: Player){
+
+      if (nTurn == 0){
+        windmillsMade1 = player1.windmillsMade.size
+        windmillsMade2 = player2.windmillsMade.size
+        gameStateSaved = gameState
+      }
+
+      if (player1.windmillsMade.size == windmillsMade1 + 1)
+        turnsWithoutWindmills = 0
+      else
+        turnsWithoutWindmills += 1
+
+      if (player1.pawns.size == 3 && player2.pawns.size == 3 && countDown == 0)
+        countDown = nTurn
+
+      if (gameState.availablePositions.size == gameStateSaved.availablePositions.size) {
+        if (gameState.positions == gameStateSaved.positions)
+          positionsRepeated += 1
+      } else {
+        gameStateSaved = gameState
+        positionsRepeated = 0
+      }
+
       println(gameState)
 
-      if (gameState.turnOfP1){
-        print("Turn of player 1.\nChoose a pawn to move: ")
-        val pawn = player1.askForPos(gameState, player1, player2, player1.movablePawns(gameState.availablePositions))
-        print("Choose a position for this pawn: ")
-        val pos = player2.askForPos(gameState, player1, player2, player1.availablePositions(pawn, gameState.availablePositions))
-        updateGame(gameState.updatePositions(pos).updatePositions(pawn), player1.move(pawn, pos), player2)
+      if(!isRoundOver(gameState, player1, player2, nTurn, turnsWithoutWindmills, countDown, positionsRepeated)){
+        nTurn += 1
+        if (gameState.turnOfP1){
+          print("Turn of player 1.\nChoose a pawn to move: ")
+          val pawn = player1.askForPos(gameState, player1, player2, player1.movablePawns(gameState.availablePositions))
+          print("Choose a position for this pawn: ")
+          val pos = player2.askForPos(gameState, player1, player2, player1.availablePositions(pawn, gameState.availablePositions))
+          updateGame(gameState.updatePositions(pos).updatePositions(pawn), player1.move(pawn, pos), player2)
+        }
+        else {
+          print("Turn of player 2.\nChoose a pawn to move: ")
+          val pawn = player1.askForPos(gameState, player1, player2, player2.movablePawns(gameState.availablePositions))
+          print("Choose a position for this pawn: ")
+          val pos = player2.askForPos(gameState, player1, player2, player2.availablePositions(pawn, gameState.availablePositions))
+          updateGame(gameState.updatePositions(pos).updatePositions(pawn), player1, player2.move(pawn, pos))
+        }
       }
       else {
-        print("Turn of player 2.\nChoose a pawn to move: ")
-        val pawn = player1.askForPos(gameState, player1, player2, player2.movablePawns(gameState.availablePositions))
-        print("Choose a position for this pawn: ")
-        val pos = player2.askForPos(gameState, player1, player2, player2.availablePositions(pawn, gameState.availablePositions))
-        updateGame(gameState.updatePositions(pos).updatePositions(pawn), player1, player2.move(pawn, pos))
+
       }
     }
   }
