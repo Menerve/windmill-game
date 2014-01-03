@@ -48,12 +48,12 @@ object Windmill extends App{
       if (player1.pawnsRem > 0 || player2.pawnsRem > 0){
         if (gameState.turnOfP1){
           print("Turn of player 1.\nChoose a position for you pawn: ")
-          val pos = player1.askForPos(gameState, player1, player2, gameState.availablePositions)
+          val pos = player1.askForPos(gameState.availablePositions)
           updateGame(gameState.updatePositions(pos), player1.addPawn(pos), player2)
         }
         else {
           print("Turn of player 2.\nChoose a position for you pawn: ")
-          val pos = player2.askForPos(gameState, player1, player2, gameState.availablePositions)
+          val pos = player2.askForPos(gameState.availablePositions)
           updateGame(gameState.updatePositions(pos), player1, player2.addPawn(pos))
         }
       }
@@ -84,16 +84,16 @@ object Windmill extends App{
         nTurn += 1
         if (gameState.turnOfP1){
           print("Turn of player 1.\nChoose a pawn to move: ")
-          val pawn = player1.askForPos(gameState, player1, player2, player1.movablePawns(gameState.availablePositions))
+          val pawn = player1.askForPos(player1.movablePawns(gameState.availablePositions))
           print("Choose a position for this pawn: ")
-          val pos = player2.askForPos(gameState, player1, player2, player1.availablePositions(pawn, gameState.availablePositions))
+          val pos = player1.askForPos(player1.availablePositions(pawn, gameState.availablePositions))
           updateGame(gameState.updatePositions(pos).updatePositions(pawn), player1.move(pawn, pos), player2)
         }
         else {
           print("Turn of player 2.\nChoose a pawn to move: ")
-          val pawn = player1.askForPos(gameState, player1, player2, player2.movablePawns(gameState.availablePositions))
+          val pawn = player2.askForPos(player2.movablePawns(gameState.availablePositions))
           print("Choose a position for this pawn: ")
-          val pos = player2.askForPos(gameState, player1, player2, player2.availablePositions(pawn, gameState.availablePositions))
+          val pos = player2.askForPos(player2.availablePositions(pawn, gameState.availablePositions))
           updateGame(gameState.updatePositions(pos).updatePositions(pawn), player1, player2.move(pawn, pos))
         }
       }
@@ -102,7 +102,8 @@ object Windmill extends App{
         val winner = checkVictory(gameState, player1, player2)
         if(winner != 0)
           println("The winner is player " + winner + "!")
-        else println("It's a tie!")
+        else
+          println("It's a tie!")
       }
     }
 
