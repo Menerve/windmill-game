@@ -36,7 +36,7 @@ case class Player(windmillsList: List[(Int, Int, Int)], pawnsList: List[Int], li
     }
   }
 
-  def updateWindmillsMade(newWindmill: List[(Int, Int, Int)]) = Player(windmillsMade ++ newWindmill, pawns, pawnsRem)
+  def addWindmill(newWindmill: List[(Int, Int, Int)]) = Player(windmillsMade ++ newWindmill, pawns, pawnsRem)
 
   def addPawn(pos: Int): Player = Player(windmillsMade, pawns.+:(pos), pawnsRem - 1)
   def removePawn(pos: Int): Player = Player(windmillsMade, pawns diff List(pos), pawnsRem)

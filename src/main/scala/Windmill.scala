@@ -43,12 +43,12 @@ object Windmill extends App{
       "The round ends when no pawn remains in players' hands.")
 
     def run(gameState: GameState, player1: Player, player2: Player): Unit = {
-       println(gameState)
+      println(gameState)
 
       if (player1.pawnsRem > 0 || player2.pawnsRem > 0){
         if (gameState.turnOfP1){
           print("Turn of player 1.\nChoose a position for you pawn: ")
-          val pos = player1.askForPos(gameState.availablePositions)
+          val pos = player1.askForPos(gameState.availablePositions) // All free positions
           updateGame(gameState.updatePositions(pos), player1.addPawn(pos), player2)
         }
         else {
@@ -57,7 +57,7 @@ object Windmill extends App{
           updateGame(gameState.updatePositions(pos), player1, player2.addPawn(pos))
         }
       }
-      else Round2.run(gameState, player1, player2)
+      else Round2.run(gameState, player1, player2) // End of round1
     }
   }
 
@@ -67,6 +67,7 @@ object Windmill extends App{
       "Players can move their pawns (not in diagonal) to create windmills " +
       "and remove pawns of the opponent.")
 
+    // Some mutable var for victory/tie conditions
     var turnsWithoutWindmills = 0
     var windmillsMade1 = 0
     var windmillsMade2 = 0
@@ -85,6 +86,7 @@ object Windmill extends App{
         if (gameState.turnOfP1){
           print("Turn of player 1.\nChoose a pawn to move: ")
           val pawn = player1.askForPos(player1.movablePawns(gameState.availablePositions))
+
           print("Choose a position for this pawn: ")
           val pos = player1.askForPos(player1.availablePositions(pawn, gameState.availablePositions))
           updateGame(gameState.updatePositions(pos).updatePositions(pawn), player1.move(pawn, pos), player2)
@@ -92,6 +94,7 @@ object Windmill extends App{
         else {
           print("Turn of player 2.\nChoose a pawn to move: ")
           val pawn = player2.askForPos(player2.movablePawns(gameState.availablePositions))
+
           print("Choose a position for this pawn: ")
           val pos = player2.askForPos(player2.availablePositions(pawn, gameState.availablePositions))
           updateGame(gameState.updatePositions(pos).updatePositions(pawn), player1, player2.move(pawn, pos))
@@ -109,6 +112,7 @@ object Windmill extends App{
 
     def isRoundOver(gameState: GameState, player1: Player, player2: Player, nTurn: Int,
                     turnWithoutWindmills: Int, countDown: Int, positionsRepeated: Int): Boolean = {
+      // Conditions of victory and tie
       (player1.pawns.size < 3 || player2.pawns.size < 3) ||
         (player1.movablePawns(gameState.availablePositions).isEmpty || player2.movablePawns(gameState.availablePositions).isEmpty) ||
         (turnsWithoutWindmills == 50) ||

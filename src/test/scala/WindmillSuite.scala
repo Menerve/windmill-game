@@ -35,7 +35,7 @@ class WindmillSuite extends FunSuite {
   }
 
   test("Pawns in windmill can't be removed."){
-    val player = player1.addPawn(1).addPawn(2).addPawn(3).updateWindmillsMade(List((1, 2, 3)))
+    val player = player1.addPawn(1).addPawn(2).addPawn(3).addWindmill(List((1, 2, 3)))
     assert(player.removablePawns.isEmpty)
   }
 }
