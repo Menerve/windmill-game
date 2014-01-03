@@ -14,11 +14,11 @@ trait Round {
       // Ask for position among available opponent's pawns
       // and update the board, windmills of the player and remove pawn at position
       if (newGameState.turnOfP1){
-        val pos = player1.askForPos(newGameState, player1, player2, player2.removablePawns)
+        val pos = player1.askForPos(player2.removablePawns)
         updateGame(newGameState.updatePositions(pos), player1.updateWindmillsMade(newWindMill), player2.removePawn(pos))
       }
       else {
-        val pos = player2.askForPos(newGameState, player1, player2, player1.removablePawns)
+        val pos = player2.askForPos(player1.removablePawns)
         updateGame(newGameState.updatePositions(pos), player1.removePawn(pos), player2.updateWindmillsMade(newWindMill))
       }
     }
